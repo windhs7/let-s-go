@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- head 中 -->
+    <link rel="stylesheet" href="css/materialize.min.css">
+
+
+    <title>H5 网页示例</title>
+</head>
+<body style="padding: 20px">
+<!---
+<div class="card-panel">
+    <span class="blue-text text-darken-2" id="service">运行模式</span>
+</div>
+
+
+<div class="ui-form-item ui-form-item-switch ui-border-b">
+    <p>
+        无障碍服务状态(必须开启)
+    </p>
+    <div class="switch">
+        <label>
+            关闭
+            <input type="checkbox" id="serviceOk">
+            <span class="lever"></span>
+            开启
+        </label>
+    </div>
+</div>
+<br/>
+
+<div class="" style="padding: 5px">
+    <a class="waves-effect waves-light btn" onclick="openEnv()">启动环境</a>
+
+</div>
+
+
+<div class="switch">
+    <p>
+        悬浮窗权限(可以不开)
+    </p>
+    <label>
+        关闭
+        <input type="checkbox" id="floatView">
+        <span class="lever"></span>
+        开启
+    </label>
+</div>
+<br/>
+
+<div class="" style="padding: 5px">
+    <a class="waves-effect waves-light btn" onclick="floatViewPermission()">开启悬浮窗权限</a>
+
+</div>
+--->
+<div class="ui-form-item ui-form-item-switch ui-border-b">
+
+    <div class="input-field  inline col s4">
+        输入激活码<input id="kaMi" class="validate" >
+    </div>
+    <div class="input-field  inline col s4">
+        验证结果：<text id="result" class="validate" ></text>
+        <p>
+            <text id="detail" class="validate" ></text>
+        </p>
+        <p>
+            <text id="detail1" class="validate" ></text>
+        </p>
+    </div>
+</div>
+<br/>
+
+<div class="row">
+    <div class="col s6" style="padding: 5px">
+        <a class="waves-effect waves-light btn" onclick="readKaMi()">读取激活码</a>
+    </div>
+    <div class="col s6" style="padding: 5px">
+        <a class="waves-effect waves-light btn" onclick="checkKaMi()">绑定激活码</a>
+    </div>
+</div>
+
+<!-- body 最后 -->
+<script src="htmljs/jquery.min.js"></script>
+<script src="htmljs/materialize.min.js"></script>
+
+
+</body>
+
+
+<script>
+    $(function () {
+        var serviceMode = window.ec.isAccMode() ? "无障碍服务" : "代理服务";
+        $("#service").text("运行模式: " + serviceMode);
+
+        var serviceOk = false;
+        if (window.ec.isAccMode()) {
+            serviceOk = window.ec.isAccServiceOk();
+        } else {
+            serviceOk = window.ec.isAgentServiceOk();
+        }
+        if (serviceOk) {
+            $("#serviceOk").prop("checked", true);
+        } else {
+            $("#serviceOk").prop("checked", false);
+        }
+        //$('#kaMi').val(window.ec.getConfig("km"));
+
+        var r2 = window.ec.hasFloatViewPermission();
+        $("#floatView").prop("checked", r2);
+
+
+    });
+
+    function openEnv() {
+        var r = window.ec.startEnv();
+        $("#serviceOk").prop("checked", r);
+
+    }
+    function readKaMi(){
+        $('#kaMi').val(window.ec.getConfig("km"));
+    }
+    function checkKaMi(){
+        if("" == $('#kaMi').val()){
+            window.ec.toast("激活码为空");
+        }else {
+            $('#result').text("");
+            $('#detail').text("");
+            $('#detail1').text("");
+            let temp = window.ec.call('checkKaMi', $('#kaMi').val());
+            //状态码：0=错误，1=成功，2=机器码已绑定，3=软件已到期，9=软件不存在，8=数据异常，-1=激活码已封禁
+            let xtemp = JSON.parse(temp);
+            if(1 == xtemp.code){
+                window.ec.saveConfig("km",$('#kaMi').val());
+                $('#result').text("验证成功！");
+                $('#detail').text("激活时间：【" + friendlyDate(xtemp.data.begintime) + "】");
+                $('#detail1').text("到期时间：【" + friendlyDate(xtemp.data.endtime) + "】");
+            }else if(0 == xtemp.code){
+                $('#result').text("错误，请确认输入正确的激活码！");
+            }else if(2 == xtemp.code){
+                $('#result').text("激活码已绑定！");
+            }else if(3 == xtemp.code){
+                $('#result').text("激活码已到期！");
+            }else if(9 == xtemp.code){
+                $('#result').text("软件不存在！");
+            }else if(8 == xtemp.code){
+                $('#result').text("数据异常！");
+            }else if(-1 == xtemp.code){
+                $('#result').text("激活码已封禁！");
+            }
+
+        }
+    }
+
+    function friendlyDate(sTime) {
+        let date = new Date(sTime * 1000);
+        date = date.getFullYear()+
+            "/"+(date.getMonth()+1)+
+            "/"+date.getDate()+
+            " "+date.getHours()+
+            ":"+date.getMinutes()+
+            ":"+date.getSeconds();
+        return date;
+    }
+
+    function floatViewPermission() {
+        let r = window.ec.requestFloatViewPermission(10);
+        $("#floatView").prop("checked", r);
+        window.ec.toast("开启选浮窗权限:" + r);
+    }
+</script>
+
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- head 中 -->
+        <link rel="stylesheet" href="css/materialize.min.css">
+
+
+        <title>H5 网页示例</title>
+    </head>
+    <body>
+
+    <div class="card-panel" style="margin-left: 10px;margin-right: 10px;margin-bottom: 10px;" >
+        <span class="green-text text-darken-2" style="margin-left: 10px">直播发言</span>
+        <span class="red-text text-darken-2" style="margin-left: 10px">(增删时每句发言都要以#结尾)</span>
+        <div class="row">
+        </div>
+        <div class="row">
+
+            <div class="col s6">
+                <button class="btn waves-effect waves-light" type="button" name="action" onclick="javascript:saveLive()">
+                    保存发言
+                </button>
+            </div>
+            <div class="col s6">
+                <button class="btn waves-effect waves-light" type="button" name="action" onclick="javascript:readLive()">
+                    读取发言
+                </button>
+            </div>
+        </div>
+        <div>
+
+                <textarea id="live" class="materialize-textarea" rows="5">
+
+                </textarea>
+
+        </div>
+    </div>
+
+        <!-- body 最后 -->
+        <script src="htmljs/jquery.min.js"></script>
+        <script src="htmljs/materialize.min.js"></script>
+
+
+    </body>
+    <script>
+
+        function readLive() {
+            //调用ui.js注入进来的扩展
+            let live = window.ec.call('readLive','');
+
+            $('#live').val(live);
+            M.textareaAutoResize($('#live'));
+        }
+        function saveLive() {
+            //调用ui.js注入进来的扩展
+            let live = window.ec.call('saveLive',$('#live').val());
+        }
+    </script>
+
+</html>

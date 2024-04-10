@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- head 中 -->
+        <link rel="stylesheet" href="css/materialize.min.css">
+
+
+        <title>H5 网页示例</title>
+    </head>
+    <body>
+
+    <div class="card-panel" style="margin-left: 10px;margin-right: 10px;margin-bottom: 10px;" >
+        <span class="blue-text text-darken-2" style="margin-left: 10px">作品评论语</span>
+        <span class="red-text text-darken-2" style="margin-left: 10px">(增删时每句评论都要以#结尾)</span>
+        <div class="row">
+        </div>
+        <div class="row">
+
+            <div class="col s6">
+                <button class="btn waves-effect waves-light " type="button" name="action" onclick="javascript:savePingLun()">
+                    保存评论
+                </button>
+            </div>
+            <div class="col s6">
+                <button class="btn waves-effect waves-light" type="button" name="action" onclick="javascript:readPingLun()">
+                    读取评论
+                </button>
+            </div>
+        </div>
+        <div>
+
+                <textarea id="pingLun" class="materialize-textarea" rows="5">
+
+                </textarea>
+
+        </div>
+    </div>
+
+        <!-- body 最后 -->
+        <script src="htmljs/jquery.min.js"></script>
+        <script src="htmljs/materialize.min.js"></script>
+
+
+    </body>
+    <script>
+
+        function readPingLun() {
+
+            //调用ui.js注入进来的扩展
+            let pingLun = window.ec.call('readPingLun','');
+
+            $('#pingLun').val(pingLun);
+            M.textareaAutoResize($('#pingLun'));
+        }
+        function savePingLun() {
+
+            //调用ui.js注入进来的扩展
+            let pingLun = window.ec.call('savePingLun',$('#pingLun').val());
+        }
+    </script>
+
+</html>
