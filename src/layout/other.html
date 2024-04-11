@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- head 中 -->
+    <link rel="stylesheet" href="css/materialize.min.css">
+
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <title>H5 网页示例</title>
+</head>
+<body style="margin-left: 10px;margin-right: 10px">
+
+
+<script src="htmljs/jquery.min.js"></script>
+<script src="htmljs/materialize.min.js"></script>
+
+<div class="card-panel">
+    <span class="card-title">数据明细</span>
+</div>
+<div>
+    <text id="myCount">数据统计：0次</text>
+</div>
+<div>
+    <textview id="myText"></textview>
+</div>
+
+</body>
+
+<script>
+    function count(varTemp) {
+        $("#myCount").text(varTemp);
+    }
+    function myText(varTemp) {
+        if('' != varTemp) {
+            let temp = $("#myText").text() + varTemp;
+            $("#myText").text(temp);
+        }else {
+            //$("#myText").text(varTemp);
+            $("#myText").text('N');
+        }
+
+    }
+
+</script>
+</html>
